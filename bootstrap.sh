@@ -6,7 +6,7 @@
 [ ! -d /etc/puppet/modules ] && mkdir -p /etc/puppet/modules;
 
 # install required puppet modules
-puppet module install puppetlabs/apache --force
-puppet module install puppetlabs-java --force
-puppet module install ssm-munin --force
-puppet module install ajcrowe-supervisord --force
+puppet module install puppetlabs/apache
+puppet module install puppetlabs-java
+puppet module install ssm-munin
+puppet module install ajcrowe-supervisord
