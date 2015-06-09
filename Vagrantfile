@@ -2,22 +2,20 @@
 # vi: set ft=ruby :
 
 vm_hostname = "4fitter"
+vm_forward_http_on = 8080
+vm_forward_https_on = 8443
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = #{vm_hostname}
-  
-	config.vm.provision :shell do |shell|
-  		shell.inline = "export {http_proxy,https_proxy,ftp_proxy}='http://10.11.46.234:8118';
-  		[ ! -d /etc/puppet/modules ] && mkdir -p /etc/puppet/modules;
-        puppet module install puppetlabs/apache;
-        puppet module install mayflower-php;
-        puppet module install puppetlabs-java;
-        puppet module install ssm-munin;
-        puppet module install ajcrowe-supervisord"
+      	config.vm.box = "ubuntu/trusty64"
+	config.vm.hostname = "#{vm_hostname}"
+
+ 	#config.vm.provision "shell", path: "bootstrap.sh" 
+	config.vm.provision "puppet" do |puppet|
+		puppet.options = "--verbose"
 	end
-  config.vm.provision "puppet"
   
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
-  # config.vm.network "private_network", ip: "192.168.33.10"
+	config.vm.network "forwarded_port", guest: 80, host: "#{vm_forward_http_on}"
+	config.vm.network "forwarded_port", guest: 443, host: "#{vm_forward_https_on}"
+
+	config.vm.network "private_network", ip: "192.168.55.10"
 end
